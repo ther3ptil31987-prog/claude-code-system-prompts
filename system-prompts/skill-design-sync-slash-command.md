@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: /design-sync slash command'
 description: Skill definition for syncing a React design system to claude.ai/design, including project selection, source-shape detection, converter configuration, validation, upload planning, and self-check behavior
-ccVersion: 2.1.163
+ccVersion: 2.1.166
 -->
 ---
 name: design-sync
@@ -27,9 +27,11 @@ If `DesignSync` isn't already in your tool list, load it via `ToolSearch(query: 
 
 The workflow is **explore the repo → write `design-sync.config.json` → run the converter deterministically from it**. The converter's discovery is heuristic-based; each heuristic has a config override (`grep ASSUMPTION lib/*.mjs` lists them) so repos that don't match the defaults write config, not code. Edit `lib/*.mjs` only as a last resort (§Troubleshooting).
 
+**State from prior runs.** If `design-sync.config.json` or `.design-sync/NOTES.md` already exist, Read both first and honor what's there — they hold corrections from earlier syncs. **Whenever the user tells you about an issue mid-run** (a path, a build flag, a component to skip, a package-manager quirk), persist it immediately so the next sync doesn't need telling again: a value that maps to a `cfg.*` field goes into `design-sync.config.json`; anything else goes as a bullet in `.design-sync/NOTES.md`. Both get committed at the end (the sub-skill says when).
+
 1. **Faithful install with the repo's own package manager.** Use the repo's pinned node version (`.nvmrc` / `engines.node`), then detect via lockfile: `yarn.lock` → `yarn install --immutable`; `pnpm-lock.yaml` → `pnpm i --frozen-lockfile`; `bun.lockb`/`bun.lock` → `bun install --frozen-lockfile`; `package-lock.json` → `npm ci`.
-2. **Determine the source shape.** If `design-sync.config.json` already exists and has a `"shape"` field, use that. Otherwise search for `.storybook/` and `*.stories.*`:
-   - Found a `.storybook/` dir → `shape = 'storybook'`. Found several → `AskUserQuestion` which one is the design system's; that dir becomes `storybookConfigDir`.
+2. **Determine the source shape.** If `design-sync.config.json` already exists and has a `"shape"` field, use that. Otherwise `Glob` for `**/.storybook/main.*` and `**/storybook/main.*` (some repos drop the dot; exclude `node_modules`) — monorepo DSes keep it in a subpackage, so never assume it's at repo root:
+   - Any match → `shape = 'storybook'`. The match's grandparent is the package to run from. Found several → `AskUserQuestion` which one is the design system's; that dir becomes `storybookConfigDir`. **Do not fall back to package just because `.storybook` isn't at repo root.**
    - Found `*.stories.*` files but no `.storybook/` dir in the target → `AskUserQuestion`: "Found story files but no `.storybook/` here — is there a Storybook config elsewhere in this repo (e.g. `apps/storybook/.storybook` in a monorepo)?" If they point at one → `shape = 'storybook'`, record that path as `storybookConfigDir`. If they say no → `shape = 'package'`.
    - No `.storybook/` and no `*.stories.*` → `AskUserQuestion` whether a Storybook exists at all. If they point at one, record it as `storybookConfigDir` and `shape = 'storybook'`. If no, `shape = 'package'`.
 
