@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.286"
+ccVersion: "2.1.295"
 -->
 # Claude Code gateway protocol
 
@@ -215,7 +215,7 @@ the SDK surfaces the message to the user:
 | 413 | `request_too_large` | Body over your cap |
 | 429 | `rate_limit_error` | Throttling; include `Retry-After` |
 | 429 | `billing_error` | The user's own cap on your gateway is reached; see Usage-limit headers below |
-| 501 | `not_supported` | Endpoint not available on this backend |
+| 501 | `not_supported` | Endpoint not available on this backend. Send `x-should-retry: false` with it; without the header the client asks once more, about half a second later, before it falls back |
 | 529 | `overloaded_error` | Upstream at capacity; client backs off and retries |
 | 5xx | `api_error` | Anything else |
 
@@ -343,10 +343,14 @@ provider's Claude endpoint needs translation:
   handle this, but their stream iterators drop the upstream's `ping` events
   (and Bedrock sends none) — emit your own `event: ping` during silent gaps
   so long thinking pauses don't trip client or proxy idle timeouts.
-- **`count_tokens`.** Bedrock has no count-tokens API. Return
-  `501 not_supported`; the client counts with a one-token request (the
-  session's model unless `ANTHROPIC_SMALL_FAST_MODEL` or
-  `ANTHROPIC_DEFAULT_HAIKU_MODEL` is set).
+- **`count_tokens`.** Answer it with Bedrock's `CountTokens` (an invoke
+  body: no `model`, a `max_tokens` above any thinking budget, no empty
+  `tools`, and of the betas only those Claude Code sends Bedrock on a count,
+  such as `claude-code-20250219`) as `{"input_tokens": N}`. If that fails,
+  or the model is an application inference profile (`CountTokens` takes
+  foundation-model ids only), return `501 not_supported`; the client counts
+  with a one-token request (the session's model unless
+  `ANTHROPIC_SMALL_FAST_MODEL` or `ANTHROPIC_DEFAULT_HAIKU_MODEL` is set).
 - **Headers.** Forward `content-type`, `accept`, `accept-encoding`,
   `anthropic-version`, `anthropic-beta`, `user-agent`, and `x-stainless-*`;
   strip the client's `Authorization` and apply the upstream's own

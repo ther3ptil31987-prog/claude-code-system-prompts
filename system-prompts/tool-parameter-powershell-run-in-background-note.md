@@ -1,6 +1,6 @@
 <!--
-name: "Tool Parameter: Bash run_in_background note"
-description: "Notes that Bash commands can use run_in_background when the result is not needed immediately"
+name: "Tool Parameter: PowerShell run_in_background note"
+description: "Allows PowerShell background commands when results are not needed immediately and completion notifications are enabled, appending background timeout guidance when applicable"
 ccVersion: "2.1.285"
 variables:
   - "BACKGROUND_TIMEOUT_NOTE_FN"
