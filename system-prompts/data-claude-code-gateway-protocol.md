@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.295"
+ccVersion: "2.1.296"
 -->
 # Claude Code gateway protocol
 
@@ -172,6 +172,17 @@ answer to an `If-None-Match`: the client counts one it didn't ask for as a
 failed fetch. Return `404` for "no managed policy"; `200` with an empty
 `settings` object means "this user has an empty policy" — they're not the
 same. **This is the endpoint most likely to change.**
+
+A Claude Desktop Code tab session on a machine that doesn't take your settings
+sends the same request with `If-None-Match: *` at its start. It asks only
+whether you have settings for that session: it reads no body and applies
+nothing. Answer as you would without the header. On a `200`, a `304` or a `404`
+the session starts and shows a warning that your settings may not apply. On a
+`429`, a `5xx` or no answer within 3 seconds it doesn't start. An answer that
+carries both `x-cc-gateway-version` and `Cache-Control: no-store` is read more
+closely: such a `404` says "nothing for this session", so no warning is shown,
+and such a `304` says "there are settings that must not be missing", so the
+session doesn't start. Send the two together only if you mean that.
 
 ## Models — optional
 
