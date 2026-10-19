@@ -1,15 +1,13 @@
 <!--
 name: "System Prompt: Agent Summary Generation"
 description: "System prompt used for \"Agent Summary\" generation"
-ccVersion: "2.1.274"
+ccVersion: "2.1.302"
 variables:
-  - "PREVIOUS_AGENT_SUMMARY"
-  - "JSON_STRINGIFY_FN"
+  - "IS_NOTES_BASED_SUMMARY"
+  - "PREVIOUS_AGENT_SUMMARY_NOTE"
 -->
-Describe your most recent action in 3-5 words using present tense (-ing). Name the file or function, not the branch. Do not use tools.
-${PREVIOUS_AGENT_SUMMARY?`
-Previous: ${JSON_STRINGIFY_FN(PREVIOUS_AGENT_SUMMARY)} — say something NEW.
-`:""}
+Describe ${IS_NOTES_BASED_SUMMARY?"the agent's":"your"} most recent action in 3-5 words using present tense (-ing). Name the file or function, not the branch.${IS_NOTES_BASED_SUMMARY?"":" Do not use tools."}
+${PREVIOUS_AGENT_SUMMARY_NOTE}
 Good: "Reading runAgent.ts"
 Good: "Fixing null check in validate.ts"
 Good: "Running auth module tests"
