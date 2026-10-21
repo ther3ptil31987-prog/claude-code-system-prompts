@@ -1,20 +1,23 @@
 <!--
 name: "Tool Description: Background monitor (streaming events)"
 description: "Describes the background monitor tool that streams stdout events from long-running scripts as chat notifications, with guidelines on script quality, output volume, and selective filtering"
-ccVersion: "2.1.287"
+ccVersion: "2.1.304"
 variables:
+  - "IS_DISKLESS_SESSION_FN"
+  - "DISKLESS_MONITOR_LIFETIME_NOTE"
   - "SINGLE_NOTIFICATION_GUIDANCE_BLOCK"
+  - "MONITOR_TOOL_NAME"
   - "IS_MONITOR_EXPIRY_ENABLED_FN"
   - "SINGLE_NOTIFICATION_COMMAND_NOTE"
-  - "IS_DISKLESS_SESSION_FN"
   - "MONITOR_TIMEOUT_GUIDANCE_FN"
 -->
-Start a background monitor that streams events from a long-running script. Each stdout line is an event — you keep working and notifications arrive in the chat. Events arrive on their own schedule and are not replies from the user, even if one lands while you're waiting for the user to answer a question.
+Start a background monitor that streams events from a long-running script. Each stdout line is an event — you keep working and notifications arrive in the chat. Events arrive on their own schedule and are not replies from the user, even if one lands while you're waiting for the user to answer a question.${IS_DISKLESS_SESSION_FN()?` ${DISKLESS_MONITOR_LIFETIME_NOTE}`:""}
 
 Pick by how many notifications you need:
 ${SINGLE_NOTIFICATION_GUIDANCE_BLOCK}
-- **One per occurrence, ${IS_MONITOR_EXPIRY_ENABLED_FN()?"until the monitor expires (re-arm to continue)":"indefinitely"}** ("tell me every time an ERROR line appears") → Monitor with an unbounded command (`tail -f`, `inotifywait -m`, `while true`).
-- **One per occurrence, until a known end** ("emit each CI step result, stop when the run completes") → Monitor with a command that emits lines and then exits.
+${IS_DISKLESS_SESSION_FN()?`- **One per occurrence, while you work on this turn** ("show each ERROR line in the dev server's log while you try the change") → ${MONITOR_TOOL_NAME} with an unbounded command (`tail -f`, `inotifywait -m`, `while true`).
+- **One per occurrence, until a known end, while you work on this turn** ("show each test file's result as the suite you just started runs, stop when it ends") → ${MONITOR_TOOL_NAME} with a command that emits lines and then exits.`:`- **One per occurrence, ${IS_MONITOR_EXPIRY_ENABLED_FN()?"until the monitor expires (re-arm to continue)":"indefinitely"}** ("tell me every time an ERROR line appears") → Monitor with an unbounded command (`tail -f`, `inotifywait -m`, `while true`).
+- **One per occurrence, until a known end** ("emit each CI step result, stop when the run completes") → Monitor with a command that emits lines and then exits.`}
 
 Your script's stdout is the event stream. Each line becomes a notification. Exit ends the watch.
 

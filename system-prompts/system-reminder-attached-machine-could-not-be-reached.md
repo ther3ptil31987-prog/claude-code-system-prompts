@@ -1,9 +1,10 @@
 <!--
 name: "System Reminder: Attached machine could not be reached"
-description: "Opens the notice that an attached machine could not be reached from this session for a stated reason, the call did not run, and the user should check that Claude is running and connected there; later guidance is appended separately"
-ccVersion: "2.1.295"
+description: "Opens the notice that an attached machine could not be reached from this session, giving when it was last heard from if known and the stated reason, and that the call did not run; the side- or cause-specific guidance is appended separately"
+ccVersion: "2.1.304"
 variables:
   - "REMOTE_MACHINE_NAME"
+  - "LAST_HEARD_FROM_CLAUSE"
   - "UNREACHABLE_REASON"
 -->
-${REMOTE_MACHINE_NAME} could not be reached from this session (${UNREACHABLE_REASON}); the call did not run. If Claude is not running on ${REMOTE_MACHINE_NAME}, or is no longer connected to this session, ask the user to check it
+${REMOTE_MACHINE_NAME} could not be reached from this session (${LAST_HEARD_FROM_CLAUSE}${UNREACHABLE_REASON}); the call did not run.

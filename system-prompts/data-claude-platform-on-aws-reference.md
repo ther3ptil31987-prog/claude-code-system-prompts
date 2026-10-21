@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Platform on AWS reference"
 description: "Reference documentation for using the Claude Developer Platform through AWS infrastructure, including AnthropicAWS clients, required region and workspace configuration, SigV4 authentication, and short-term API keys"
-ccVersion: "2.1.246"
+ccVersion: "2.1.304"
 -->
 # Claude Platform on AWS
 
@@ -22,6 +22,7 @@ ccVersion: "2.1.246"
 | Java | See SDK repo in `shared/live-sources.md` | See SDK repo in `shared/live-sources.md` |
 | Ruby | `gem install anthropic aws-sdk-core` | See SDK repo in `shared/live-sources.md` |
 | PHP | `composer require anthropic-ai/sdk aws/aws-sdk-php` | See SDK repo in `shared/live-sources.md` |
+| `ant` CLI | See `shared/anthropic-cli.md` -> Install and auth | No client to construct: with the two values below set, `ant` commands other than `ant beta:worker` go to Claude Platform on AWS. A missing workspace ID doesn't throw, so confirm with `ant auth status` |
 
 After construction, **use the client exactly as you would `Anthropic()`** - `client.messages.create(...)`, `client.beta.sessions.*`, etc., with bare model IDs.
 
