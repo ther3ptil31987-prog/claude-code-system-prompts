@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK set model error response model field"
+description: "Schema description for the internal set_model-only model field on control error responses, which reports the model the next turn runs after a refused or failed switch, including restarted cloud worker behavior and which hosts send it"
+ccVersion: "2.1.307"
+-->
+@internal set_model only: the model the session's next turn runs as of this answer, spelled as on the success payload's `model`. A refusal leaves the model as it was, and a restarted cloud worker can already run the requested model: it starts on the host's last pick. One refusal moves it: when the server refuses for good the model that a restarted worker started on, before any turn, the session goes back to the model recorded for it. The fixed 'set_model failed' reply can follow an applied switch, so it names the model too. A refusal fallback in a running turn, before or after this answer, can move the next turn to another model. `claude -p` writes it on its stream-json control channel, unless it cannot read the model. A claude-code-server tenant writes it too, except on its 'still pending' answer. claude -p's Remote Control bridge lane and interactive Remote Control leave it out.

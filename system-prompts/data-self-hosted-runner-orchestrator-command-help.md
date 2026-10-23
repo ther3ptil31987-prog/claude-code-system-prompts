@@ -1,7 +1,7 @@
 <!--
 name: "Data: Self-hosted runner orchestrator command help"
 description: "Documents self-hosted runner orchestrator connection, hook, SCM connector, runtime, health, and debug command-line options"
-ccVersion: "2.1.299"
+ccVersion: "2.1.307"
 variables:
   - "DEFAULT_SELF_HOSTED_RUNNER_API_URL"
   - "DEFAULT_HOOK_CONCURRENCY"
@@ -60,6 +60,11 @@ Runtime:
                               ALWAYS returns 200 (liveness). Body carries connected/last_*/queue_counts/warm_hints_dispatched
                               for readiness/alerting. [env: SELF_HOSTED_RUNNER_HEALTH_PORT]
   --log-level <level>         Log level: info or debug (default: info)
+  --agent-proxy-url <url>     Agent proxy for the runners the spawn-runner hook starts. Passed to the
+                              hook as SELF_HOSTED_RUNNER_AGENT_PROXY_URL (the hook must pass it on to
+                              each runner, as it would the variable); checked here as the runners
+                              check it. The flag wins over the variable when both are set.
+                              [env: SELF_HOSTED_RUNNER_AGENT_PROXY_URL]
 
 Debug:
   --debug-dir <path>          DEV ONLY — writes each work-order JWT + decoded JSON + hook stderr to
