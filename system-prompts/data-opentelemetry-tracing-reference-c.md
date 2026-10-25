@@ -1,7 +1,7 @@
 <!--
 name: "Data: OpenTelemetry tracing reference — C#"
 description: "Provides C# examples for registering a tracer provider, configuring Anthropic SDK tracing, and propagating context to connect SDK and API spans"
-ccVersion: "2.1.300"
+ccVersion: "2.1.309"
 -->
 # OpenTelemetry Tracing - C#
 
@@ -19,10 +19,8 @@ using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;   // TraceContextPropagator, PropagationContext
 using OpenTelemetry.Trace;
 
-// The SDK emits its spans from the source com.anthropic.sdk.csharp. Add com.anthropic.sdk.csharp*
-// instead to include the SDK's clients for cloud platforms.
 using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-    .AddSource("com.anthropic.sdk.csharp")
+    .AddSource("com.anthropic.sdk.csharp*")
     .AddConsoleExporter()
     .Build();
 
@@ -49,7 +47,7 @@ var conversation = client.WithOptions(options => options with
 var message = await conversation.Messages.Create(parameters);
 ```
 
-There is no tracer-provider option in C#: the SDK's spans go to every tracer provider that adds the source `com.anthropic.sdk.csharp`.
+There is no tracer-provider option in C#: the SDK's spans go to every tracer provider that adds `com.anthropic.sdk.csharp*` with `AddSource`.
 
 ## Connect API spans to your own traces
 
@@ -65,8 +63,10 @@ using (source.StartActivity("summarize_issues"))
 }
 ```
 
-Add `"MyService"` to the tracer provider with `AddSource`, next to `com.anthropic.sdk.csharp`.
+Add `"MyService"` to the tracer provider with `AddSource`, next to `com.anthropic.sdk.csharp*`.
 
 Without the SDK (raw HTTP or another client), inject the active span's trace context into the request headers:
 
 `new TraceContextPropagator().Inject(new PropagationContext(Activity.Current?.Context ?? default, Baggage.Current), request, (carrier, key, value) => carrier.Headers.Add(key, value))`
+
+After the SDK setup, offer setting up Claude API tracing where `shared/opentelemetry.md` -> SDK tracing vs API tracing says to, if you didn't already.

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Test spec file format"
 description: "Reference for the Markdown spec files in .claude-test/specs/ — front matter keys, the three required parts, data-creating specs, and what makes a spec goal-oriented and checkable from a single end screenshot"
-ccVersion: "2.1.307"
+ccVersion: "2.1.310"
 -->
 # Spec file format
 
@@ -14,6 +14,7 @@ id: ct_k3xq5mwa            # minted by the helper when a run creates the file; l
 allow_navigation: true     # optional; default false = reach everything by clicking from the base URL
 timeout_ms: 180000         # optional; per-spec budget — when set, time is the only limit; default ≈ 3 min and ≈ 30 browser actions
 tags: [creates-data]       # optional; "creates-data" marks a spec whose steps add records to the app
+area: search               # optional; one lower-case word, the part of the app it is about: Claude Test's panel groups tests by it
 ---
 # Search finds an article
 
@@ -34,8 +35,8 @@ A spec has three parts:
 
 Front matter is optional. `id` is the spec's stable identity (a run's `write-spec` helper mints it; a hand-written
 spec may omit it, and nothing else should invent or change one). `allow_navigation` (default false: the agent
-follows the page's own links; true lets it open paths on your host directly), `timeout_ms` and
-`tags` are read too; other keys are kept and ignored.
+follows the page's own links; true lets it open paths on your host directly), `timeout_ms`,
+`tags` and `area` are read too; other keys are kept and ignored.
 
 **Specs that need data.** If a journey needs a record to exist, either configure a seed script as
 `setupCommand` in `.claude-testrc` (before each run you are asked, and it runs only if you say yes; it must be safe to run twice), or

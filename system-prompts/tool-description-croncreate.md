@@ -1,13 +1,11 @@
 <!--
 name: "Tool Description: CronCreate"
-description: "Describes the CronCreate tool for enqueuing one-shot or recurring cron-based jobs with jitter and off-minute scheduling guidance"
-ccVersion: "2.1.299"
+description: "Describes the CronCreate tool for enqueuing one-shot or recurring cron-based jobs, with durable or session-only persistence, jitter and off-minute scheduling guidance"
+ccVersion: "2.1.310"
 variables:
-  - "CRON_DURABILITY_SECTION"
-  - "IS_MONITOR_TOOL_ENABLED_FN"
+  - "CRON_DURABLE_FLAG"
   - "CRON_CREATE_TOOL_NAME"
   - "MONITOR_TOOL_NAME"
-  - "CRON_DURABLE_RUNTIME_NOTE"
   - "MATH_OBJECT"
   - "RECURRING_JITTER_FRACTION"
   - "RECURRING_JITTER_CAP_MS"
@@ -41,15 +39,19 @@ Every user who asks for "9am" gets `0 9`, and every user who asks for "hourly" g
 
 Only use minute 0 or 30 when the user names that exact time and clearly means it ("at 9:00 sharp", "at half past", coordinating with a meeting). When in doubt, nudge a few minutes early or late — the user will not notice, and the fleet will.
 
-${CRON_DURABILITY_SECTION}
-${IS_MONITOR_TOOL_ENABLED_FN()?`
+${CRON_DURABLE_FLAG?`## Durability
+
+By default (durable: false) the job lives only in this Claude session — nothing is written to disk, and the job is gone when Claude exits. Pass durable: true to write to .claude/scheduled_tasks.json so the job survives restarts. Only use durable: true when the user explicitly asks for the task to persist ("keep doing this every day", "set this up permanently"). Most "remind me in 5 minutes" / "check back in an hour" requests should stay session-only.`:`## Session-only
+
+Jobs live only in this Claude session — nothing is written to disk, and the job is gone when Claude exits.`}
+
 ## Not for live watching
 
 ${CRON_CREATE_TOOL_NAME} re-runs a prompt at fixed wall-clock intervals. To watch a log file, process, or command output and be notified the moment something changes, use the ${MONITOR_TOOL_NAME} tool instead — ${MONITOR_TOOL_NAME} streams events as they happen; cron polls on a schedule.
-`:""}
+
 ## Runtime behavior
 
-Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_RUNTIME_NOTE}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
+Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_FLAG?"Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on next launch they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. ":""}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
 
 Recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days — they fire one final time, then are deleted. This bounds session lifetime. Tell the user about the ${CANCEL_TIMEFRAME_DAYS}-day limit when scheduling recurring jobs.
 

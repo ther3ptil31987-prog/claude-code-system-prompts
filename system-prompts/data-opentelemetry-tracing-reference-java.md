@@ -1,7 +1,7 @@
 <!--
 name: "Data: OpenTelemetry tracing reference — Java"
 description: "Provides Java examples for registering a tracer provider, configuring Anthropic SDK tracing, and propagating context to connect SDK and API spans"
-ccVersion: "2.1.300"
+ccVersion: "2.1.309"
 -->
 # OpenTelemetry Tracing - Java
 
@@ -67,3 +67,5 @@ try (Scope scope = span.makeCurrent()) {
 Without the SDK (raw HTTP or another client), inject the active span's trace context into the request headers:
 
 `W3CTraceContextPropagator.getInstance().inject(Context.current(), requestBuilder, HttpRequest.Builder::header)`
+
+After the SDK setup, offer setting up Claude API tracing where `shared/opentelemetry.md` -> SDK tracing vs API tracing says to, if you didn't already.

@@ -1,7 +1,7 @@
 <!--
 name: "Data: OpenTelemetry tracing reference — Python"
 description: "Provides Python examples for registering a tracer provider, configuring Anthropic SDK tracing, and propagating context to connect SDK and API spans"
-ccVersion: "2.1.300"
+ccVersion: "2.1.309"
 -->
 # OpenTelemetry Tracing - Python
 
@@ -81,3 +81,5 @@ headers = {
 }
 TraceContextTextMapPropagator().inject(headers)  # adds traceparent for the active span
 ```
+
+After the SDK setup, offer setting up Claude API tracing where `shared/opentelemetry.md` -> SDK tracing vs API tracing says to, if you didn't already.
