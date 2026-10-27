@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK UI attach client request capabilities field"
+description: "Documents the client capability list controlling plugin UI requests and how repeated UI attachments replace or preserve it"
+ccVersion: "2.1.311"
+-->
+@internal The engine's requests this client answers on a plugin's behalf: `ui_copy` (its clipboard), `ui_prompt_read` / `ui_prompt_fill` / `ui_prompt_paint` / `ui_prompt_suggest` (its composer), `ui_read_selection` (what the person has selected in its page). The engine sends each only to a client that named it; a client that never names any (or names `[]`) is never asked, so `$.ui.copy` to its surface answers `no-clipboard`, the prompt calls the empty box / false and `$.ui.selection` nothing, as before. On a repeated ui_attach a given list (including `[]`) replaces the earlier one and an absent field keeps it: send `[]` to stop answering.

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Streaming reference — C#"
 description: "C# streaming reference including streaming events and the RawMessageStreamEvent TryPick methods"
-ccVersion: "2.1.260"
+ccVersion: "2.1.311"
 -->
 # Streaming - C#
 
@@ -14,7 +14,7 @@ var parameters = new MessageCreateParams
 {
     Model = "{{OPUS_ID}}",
     MaxTokens = 64000,
-    Messages = [new() { Role = Role.User, Content = "Write a haiku" }]
+    Messages = [new UserMessageParam { Content = "Write a haiku" }]
 };
 
 await foreach (RawMessageStreamEvent streamEvent in client.Messages.CreateStreaming(parameters))

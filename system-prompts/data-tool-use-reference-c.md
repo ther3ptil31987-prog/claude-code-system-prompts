@@ -1,7 +1,7 @@
 <!--
 name: "Data: Tool use reference — C#"
 description: "C# tool use reference including defining tools and reconstructing response content for the follow-up assistant message"
-ccVersion: "2.1.309"
+ccVersion: "2.1.311"
 -->
 # Tool Use - C#
 
@@ -48,7 +48,7 @@ var parameters = new MessageCreateParams
             },
         },
     ],
-    Messages = [new() { Role = Role.User, Content = "Weather in Paris?" }],
+    Messages = [new UserMessageParam { Content = "Weather in Paris?" }],
 };
 ```
 
@@ -111,8 +111,8 @@ foreach (ContentBlock block in response.Content)
 List<MessageParam> followUpMessages =
 [
     .. parameters.Messages,
-    new() { Role = Role.Assistant, Content = assistantContent },
-    new() { Role = Role.User, Content = toolResults },
+    new AssistantMessageParam { Content = assistantContent },
+    new UserMessageParam { Content = toolResults },
 ];
 ```
 

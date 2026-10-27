@@ -1,13 +1,13 @@
 <!--
 name: "Data: Streaming reference — PHP"
 description: "PHP streaming reference including streaming events and handling content block deltas (requires SDK v0.5.0+)"
-ccVersion: "2.1.246"
+ccVersion: "2.1.311"
 -->
 # Streaming - PHP
 
 ## Streaming
 
-> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single `$params` array; calling with named parameters throws `Unknown named parameter $model`. Upgrade: `composer require "anthropic-ai/sdk:^0.7"`
+> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single `$params` array; calling with named parameters throws `Unknown named parameter $model`. Upgrade: `composer require "anthropic-ai/sdk"`
 
 ```php
 use Anthropic\Messages\RawContentBlockDeltaEvent;

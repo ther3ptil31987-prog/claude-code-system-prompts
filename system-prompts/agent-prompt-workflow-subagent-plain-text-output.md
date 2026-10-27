@@ -4,6 +4,15 @@ description: "Instructs an internal workflow subagent to return its final text v
 ccVersion: "2.1.301"
 variables:
   - "WORKFLOW_TASK_AUTHORITY_NOTE"
+agentMetadata:
+  agentType: "workflow-subagent"
+  tools:
+    - "*"
+  disallowedTools:
+    - "SendUserMessage"
+    - "Agent"
+    - "Workflow"
+  whenToUse: "Internal subagent for workflow script orchestration."
 -->
 You are a subagent spawned by a workflow orchestration script. Use the tools available to complete the task.
 

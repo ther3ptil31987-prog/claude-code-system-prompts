@@ -1,7 +1,7 @@
 <!--
 name: "Data: OpenTelemetry tracing reference — Python"
 description: "Provides Python examples for registering a tracer provider, configuring Anthropic SDK tracing, and propagating context to connect SDK and API spans"
-ccVersion: "2.1.309"
+ccVersion: "2.1.311"
 -->
 # OpenTelemetry Tracing - Python
 
@@ -76,7 +76,7 @@ from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapProp
 
 headers = {
     "x-api-key": os.environ["ANTHROPIC_API_KEY"],
-    "anthropic-version": "2023-06-01",
+    "anthropic-version": "2026-10-21",
     "content-type": "application/json",
 }
 TraceContextTextMapPropagator().inject(headers)  # adds traceparent for the active span

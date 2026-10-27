@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Platform on AWS reference"
 description: "Reference documentation for using the Claude Developer Platform through AWS infrastructure, including AnthropicAWS clients, required region and workspace configuration, SigV4 authentication, and short-term API keys"
-ccVersion: "2.1.309"
+ccVersion: "2.1.311"
 -->
 # Claude Platform on AWS
 
@@ -17,7 +17,7 @@ ccVersion: "2.1.309"
 |---|---|---|
 | Python | `pip install -U "anthropic[aws]"` | `from anthropic import AnthropicAWS` -> `AnthropicAWS()` |
 | TypeScript | `npm install @anthropic-ai/aws-sdk` | `import AnthropicAws from "@anthropic-ai/aws-sdk"` -> `new AnthropicAws()` |
-| Go | `go get github.com/anthropics/anthropic-sdk-go` | `import anthropicaws "github.com/anthropics/anthropic-sdk-go/aws"` -> `anthropicaws.NewClient(ctx, anthropicaws.ClientConfig{})` |
+| Go | `go get github.com/anthropics/anthropic-sdk-go/v2` | `import anthropicaws "github.com/anthropics/anthropic-sdk-go/v2/aws"` -> `anthropicaws.NewClient(ctx, anthropicaws.ClientConfig{})` |
 | C# | `dotnet add package Anthropic.Aws` | `new AnthropicAwsClient()` |
 | Java | See SDK repo in `shared/live-sources.md` | See SDK repo in `shared/live-sources.md` |
 | Ruby | `gem install anthropic aws-sdk-core` | See SDK repo in `shared/live-sources.md` |
