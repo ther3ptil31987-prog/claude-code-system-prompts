@@ -1,7 +1,7 @@
 <!--
 name: "Data: Data visualization anti-patterns"
 description: "Reference list of chart and dashboard anti-patterns to check against before shipping a data visualization"
-ccVersion: "2.1.246"
+ccVersion: "2.1.314"
 -->
 # Anti-patterns - what goes wrong
 
@@ -60,7 +60,8 @@ Good: Emphasis (highlight one, gray the rest), or a stat tile / hero number.
 Good: A stat tile. The number is the chart.
 
 **Bad: A donut/pie for comparing close values.**
-Good: A bar, or the numbers. Part-to-whole at a glance only, <= 6 segments.
+Good: Ranked bars, or the numbers. Part-to-whole at a glance only, <= 6 segments: the tall
+segmented bar (`choosing-a-form.md`).
 
 **Bad: More than ~7 color classes carrying meaning.**
 Good: A table, or table + chart. Past ~7 bins, adjacent classes blur.
@@ -71,6 +72,7 @@ Good: A table, or table + chart. Past ~7 bins, adjacent classes blur.
 childish, at scale.
 Good: Thin marks, hairline recessive grid/axes, generous padding. Saturated fills are
 for small marks and accents, never large blocks.
+**Exception:** the tall segmented bar (*Figures* in `marks-and-anatomy.md`).
 
 **Bad: Dashed gridlines or axis rules.** Dashing adds visual noise and reads as
 "projection" or "threshold" when it's just a grid.
@@ -78,6 +80,7 @@ Good: Gridlines and axes are solid hairlines, one shade off the surface.
 
 **Bad: A number on every data point.** A value beside every dot or segment is chaos and goes unread.
 Good: A legend is always present for >= 2 series; direct-label *selectively* (the endpoint, the extreme, the one series that matters) and let the axis + tooltip carry the rest.
+**Exception:** the tall segmented bar (*Figures* in `marks-and-anatomy.md`).
 
 **Bad: A border drawn around marks to separate them.**
 Good: A 2px surface gap between fills (stacked segments and adjacent bars alike) and a 2px surface ring (on overlapping markers).

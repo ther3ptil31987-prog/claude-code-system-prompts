@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Data Visualization"
 description: "Skill instructions for producing accessible, brand-neutral charts, graphs, dashboards, and data visualizations using a validated method"
-ccVersion: "2.1.246"
+ccVersion: "2.1.314"
 -->
 ---
 name: Data Visualization
@@ -95,6 +95,7 @@ of what goes wrong. If your chart matches an entry, it's wrong.
   obligates visible labels or a table view - it is not dismissable.
 - **Thin marks; a legend always present for >= 2 series (none for one), with
   selective direct labels (never a number on every point); recessive grid/axes.**
+  One exception, legend kept: the tall segmented bar (*Figures* in `references/marks-and-anatomy.md`).
 - **Text wears text tokens, never the series color** - values, labels, and legends
   stay in primary/secondary/muted ink; a colored mark beside them carries identity.
 - **Status colors are reserved** (good/warning/serious/critical) and never reused

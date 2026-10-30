@@ -1,7 +1,7 @@
 <!--
 name: "System Reminder: Reserved-address MCP server refusal"
 description: "Lists MCP servers refused for reserved addresses and explains that retries cannot resolve the refusal"
-ccVersion: "2.1.312"
+ccVersion: "2.1.314"
 variables:
   - "REFUSED_MCP_SERVER_LIST"
   - "REFUSED_MCP_SERVER_OVERFLOW_NOTE"
@@ -9,4 +9,4 @@ variables:
 The following MCP servers are configured, but Claude Code itself refuses them because it reserves their address for its own use. Their tools are unavailable for this session:
 ${REFUSED_MCP_SERVER_LIST}${REFUSED_MCP_SERVER_OVERFLOW_NOTE}
 
-This is not a connection failure or an administrator's setting, so retrying will not help. If the user's request depends on one of these servers, tell them that Claude Code refuses the entry, and that whoever added it can remove it or change its address. If the refusal looks like a mistake, they can ${{ISSUES_EXPLAINER:"report the issue at https://github.com/anthropics/claude-code/issues",PACKAGE_URL:"@anthropic-ai/claude-code",README_URL:"https://code.claude.com/docs/en/overview",VERSION:"<<CCVERSION>>",FEEDBACK_CHANNEL:"https://github.com/anthropics/claude-code/issues",BUILD_TIME:"<<BUILD_TIME>>",GIT_SHA:"f375cd85d4f70920de17ce3a4ad646e18834e833",HOOKS_WORKER_URL:"./src/plugins/functionHooks/hooks-worker/hooks-worker.js",DD_SOURCEMAP_GROUP:"default"}.ISSUES_EXPLAINER}.
+This is not a connection failure or an administrator's setting, so retrying will not help. If the user's request depends on one of these servers, tell them that Claude Code refuses the entry, and that whoever added it can remove it or change its address. If the refusal looks like a mistake, they can ${{ISSUES_EXPLAINER:"report the issue at https://github.com/anthropics/claude-code/issues",PACKAGE_URL:"@anthropic-ai/claude-code",README_URL:"https://code.claude.com/docs/en/overview",VERSION:"<<CCVERSION>>",FEEDBACK_CHANNEL:"https://github.com/anthropics/claude-code/issues",BUILD_TIME:"<<BUILD_TIME>>",GIT_SHA:"5c99a5b6399766569a32979c715862fdb61c7efa",HOOKS_WORKER_URL:"./src/plugins/functionHooks/hooks-worker/hooks-worker.js",DD_SOURCEMAP_GROUP:"default"}.ISSUES_EXPLAINER}.
