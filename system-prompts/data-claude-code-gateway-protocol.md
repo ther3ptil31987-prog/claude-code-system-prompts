@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.296"
+ccVersion: "2.1.315"
 -->
 # Claude Code gateway protocol
 
@@ -225,7 +225,7 @@ the SDK surfaces the message to the user:
 | 403 | `permission_error` | Authenticated but not allowed |
 | 413 | `request_too_large` | Body over your cap |
 | 429 | `rate_limit_error` | Throttling; include `Retry-After` |
-| 429 | `billing_error` | The user's own cap on your gateway is reached; see Usage-limit headers below |
+| 429 | `billing_error` | The user's own cap on your gateway, or a budget their group shares, is reached; see Usage-limit headers below |
 | 501 | `not_supported` | Endpoint not available on this backend. Send `x-should-retry: false` with it; without the header the client asks once more, about half a second later, before it falls back |
 | 529 | `overloaded_error` | Upstream at capacity; client backs off and retries |
 | 5xx | `api_error` | Anything else |
@@ -277,7 +277,10 @@ you can't read your counter and choose to fail closed, send the 429 with
 message, nothing else. This gateway sends exactly the shapes above for caps
 set through its admin API (`overage-period` is `daily`, `weekly`, or
 `monthly`); when several caps apply it describes the fullest one, or once
-blocked the one that resets last.
+blocked the one that resets last. When what ran out is a budget the user's
+whole group shares, it sends the `monthly` shape plus
+`anthropic-ratelimit-unified-overage-scope: group_pool`, which tells the
+client that the user's own cap is not what blocked them.
 
 To show the user dollars as well ("$271.40 / $500.00 spent"), also answer
 `GET /api/oauth/usage`, the path claude.ai serves Claude Code's usage data on,
